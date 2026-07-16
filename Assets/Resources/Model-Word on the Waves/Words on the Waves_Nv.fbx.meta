@@ -3,7 +3,47 @@ guid: c510d7afbe1331a4eb3c5631724b74c8
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Gai 2
+    second: {fileID: 2100000, guid: a93c6e36abfbf5945a91339e60f21c1e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Gai 2.001
+    second: {fileID: 2100000, guid: ef31e27ffb92085409c0370c64475ed5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Gai 2.003
+    second: {fileID: 2100000, guid: 773ab561882d5cf489aa3ea269f6234c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Gai1
+    second: {fileID: 2100000, guid: d895eadaefdd935498458982430b095b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat
+    second: {fileID: 2100000, guid: b5c8c5c34dea2c048a319693457bc9b2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat.001
+    second: {fileID: 2100000, guid: 1ff6a307816261f4798d1f6041a3de68, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Gai 1
+    second: {fileID: 2800000, guid: 2efba8a749a61d341a28027593617d4d, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Gai 2
+    second: {fileID: 2800000, guid: bdc1e05e1fefd1d4b95bf63b126e7204, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -22,7 +62,7 @@ ModelImporter:
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
     importConstraints: 0
-    animationCompression: 1
+    animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -94,13 +134,13 @@ ModelImporter:
     globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
-    hasExtraRoot: 0
+    hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
-  avatarSetup: 0
+  avatarSetup: 1
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   importBlendShapeDeformPercent: 1
   remapMaterialsIfMaterialImportModeIsNone: 0
