@@ -1220,6 +1220,7 @@ GameObject:
   - component: {fileID: 7269736821198803837}
   - component: {fileID: 3603838251680139527}
   - component: {fileID: -4871763860629133913}
+  - component: {fileID: 8049823336077459244}
   m_Layer: 0
   m_Name: gaidaden
   m_TagString: Untagged
@@ -1293,6 +1294,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!65 &8049823336077459244
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8045851931099367879}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.3574524, y: 0.4965601, z: 0.14318848}
+  m_Center: {x: -0.07234955, y: 0.25171995, z: 0.024780273}
 --- !u!1 &8057052573304904260
 GameObject:
   m_ObjectHideFlags: 0

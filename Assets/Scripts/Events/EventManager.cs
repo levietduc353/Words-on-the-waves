@@ -1,0 +1,68 @@
+using System;
+using UnityEngine;
+
+namespace WordsOnTheWaves.Events
+{
+    public static class EventManager
+    {
+        // ==========================================
+        // UI & STATE EVENTS
+        // ==========================================
+        
+        /// <summary>
+        /// Phát ra khi người chơi ấn Start Game ở Main Menu
+        /// </summary>
+        public static Action OnStartGameClicked;
+
+        /// <summary>
+        /// Phát ra khi người chơi chọn một bãi biển trên Map. Tham số: Tên scene đích.
+        /// </summary>
+        public static Action<string> OnMapSelected;
+
+        /// <summary>
+        /// Phát ra khi người chơi nhấn nút Decor.
+        /// </summary>
+        public static Action OnDecorButtonClicked;
+
+        /// <summary>
+        /// Phát ra khi người chơi nhấn nút Back để từ giao diện khác quay lại Map.
+        /// </summary>
+        public static Action OnBackToMapClicked;
+
+        /// <summary>
+        /// Phát ra khi chuyển đổi GameState. Tham số là tên của State mới.
+        /// </summary>
+        public static Action<string> OnGameStateChanged;
+
+        /// <summary>
+        /// Phát ra khi cập nhật số tiền hiện tại. Tham số: Số tiền mới.
+        /// </summary>
+        public static Action<int> OnMoneyUpdated;
+
+        /// <summary>
+        /// Phát ra khi cập nhật thời gian. Tham số: Giá trị thời gian mới.
+        /// </summary>
+        public static Action<float> OnTimeUpdated;
+
+
+        // ==========================================
+        // INPUT EVENTS
+        // ==========================================
+
+        /// <summary>
+        /// Phát ra khi người chơi click/tap trúng một vật thể 3D (sách, khách hàng, đồ trang trí).
+        /// Tham số: GameObject bị click.
+        /// </summary>
+        public static Action<GameObject> OnInteractableTapped;
+        
+        /// <summary>
+        /// Phát ra khi bắt đầu thao tác Drag (Kéo). Tham số: GameObject đang bị kéo.
+        /// </summary>
+        public static Action<GameObject> OnObjectDragStarted;
+
+        /// <summary>
+        /// Phát ra khi kết thúc thao tác Drop (Thả). Tham số: GameObject vừa thả.
+        /// </summary>
+        public static Action<GameObject> OnObjectDropped;
+    }
+}
