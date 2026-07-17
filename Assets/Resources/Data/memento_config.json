@@ -1,0 +1,36 @@
+﻿{
+  "mementos": [
+    {
+      "id": "memento_detective_badge",
+      "displayName": "Huy hieu tham tu",
+      "prefabName": "Huy hieu",
+      "buffType": "PriceBonus",
+      "buffPercent": 12.0,
+      "description": "Mot huy hieu tu vi tham tu gia. Toa ra ve uy nghiem khien khach hang tin tuong hon."
+    },
+    {
+      "id": "memento_compass",
+      "displayName": "La ban co",
+      "prefabName": "La ban",
+      "buffType": "Attraction",
+      "buffPercent": 10.0,
+      "description": "Chiec la ban co xua. Nhung nguoi di bien noi rang no dan duong ve nha."
+    },
+    {
+      "id": "memento_monocle",
+      "displayName": "Kinh don hoc gia",
+      "prefabName": "Huy hieu",
+      "buffType": "CustomerSpeed",
+      "buffPercent": 8.0,
+      "description": "Kinh don cua mot hoc gia uyen bac. Deo len ban cam thay minh hieu biet hon."
+    },
+    {
+      "id": "memento_crystal",
+      "displayName": "Tinh the huyen bi",
+      "prefabName": "Gau bong",
+      "buffType": "PriceBonus",
+      "buffPercent": 15.0,
+      "description": "Mot manh tinh the phat sang nhe. Nguoi ta noi no mang lai may man."
+    }
+  ]
+}

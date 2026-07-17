@@ -1,0 +1,48 @@
+﻿{
+  "crates": [
+    {
+      "id": "crate_light",
+      "displayName": "Kien hang Nhe",
+      "cratePrice": 30,
+      "hint": "Nhung trang sach nhe nhang, phu hop cho moi lua tuoi.",
+      "genreSlots": [
+        { "genre": "Kids",   "dropMin": 2, "dropMax": 4 },
+        { "genre": "Travel", "dropMin": 0, "dropMax": 2 }
+      ]
+    },
+    {
+      "id": "crate_mystery",
+      "displayName": "Kien hang Bi An",
+      "cratePrice": 60,
+      "hint": "Day la thu gi do... hac am. Tot nhat dung hoi nhieu.",
+      "genreSlots": [
+        { "genre": "Crime",   "dropMin": 2, "dropMax": 4 },
+        { "genre": "Fantasy", "dropMin": 0, "dropMax": 2 }
+      ]
+    },
+    {
+      "id": "crate_classic",
+      "displayName": "Kien hang Co Dien",
+      "cratePrice": 80,
+      "hint": "Mui giay cu thoang thoang. Co gi do truong ton o day.",
+      "genreSlots": [
+        { "genre": "Classic", "dropMin": 2, "dropMax": 4 },
+        { "genre": "Drama",   "dropMin": 1, "dropMax": 3 },
+        { "genre": "Fact",    "dropMin": 0, "dropMax": 2 }
+      ]
+    },
+    {
+      "id": "crate_premium",
+      "displayName": "Kien hang Cao Cap",
+      "cratePrice": 150,
+      "hint": "Khong ai biet ben trong co gi. Ke ca nguoi ban.",
+      "genreSlots": [
+        { "genre": "Crime",   "dropMin": 1, "dropMax": 2 },
+        { "genre": "Fantasy", "dropMin": 1, "dropMax": 2 },
+        { "genre": "Classic", "dropMin": 1, "dropMax": 2 },
+        { "genre": "Fact",    "dropMin": 1, "dropMax": 2 },
+        { "genre": "Travel",  "dropMin": 1, "dropMax": 2 }
+      ]
+    }
+  ]
+}

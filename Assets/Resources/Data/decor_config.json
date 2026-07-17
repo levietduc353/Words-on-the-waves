@@ -1,0 +1,11 @@
+﻿{
+  "decorItems": [
+    { "id": "decor_lamp",    "displayName": "Den LED",     "prefabName": "Den led",    "buffType": "PriceBonus",    "buffPercent": 5.0  },
+    { "id": "decor_plant",   "displayName": "Cay xanh",    "prefabName": "Cay",        "buffType": "CustomerSpeed", "buffPercent": 10.0 },
+    { "id": "decor_bell",    "displayName": "Chuong gio",  "prefabName": "Chuong gio", "buffType": "Attraction",    "buffPercent": 8.0  },
+    { "id": "decor_ship",    "displayName": "Mo hinh tau", "prefabName": "Thuyen",     "buffType": "PriceBonus",    "buffPercent": 3.0  },
+    { "id": "decor_bear",    "displayName": "Gau bong",    "prefabName": "Gau bong",   "buffType": "Attraction",    "buffPercent": 6.0  },
+    { "id": "decor_compass", "displayName": "La ban",      "prefabName": "La ban",     "buffType": "CustomerSpeed", "buffPercent": 5.0  },
+    { "id": "decor_sign",    "displayName": "Bien hieu",   "prefabName": "Bang",       "buffType": "Attraction",    "buffPercent": 12.0 }
+  ]
+}

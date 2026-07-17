@@ -1,0 +1,13 @@
+﻿{
+  "spawnRules": [
+    { "customerType": "Normal",     "spawnWeight": 50, "bonusMultiplier": 1.0 },
+    { "customerType": "NeedAdvice", "spawnWeight": 35, "bonusMultiplier": 1.5 },
+    { "customerType": "Special",    "spawnWeight": 15, "bonusMultiplier": 2.0 }
+  ],
+  "specialCustomers": [
+    { "id": "special_detective",   "preferredGenre": "Crime",   "mementoId": "memento_detective_badge" },
+    { "id": "special_adventurer",  "preferredGenre": "Travel",  "mementoId": "memento_compass"         },
+    { "id": "special_scholar",     "preferredGenre": "Fact",    "mementoId": "memento_monocle"         },
+    { "id": "special_dreamer",     "preferredGenre": "Fantasy", "mementoId": "memento_crystal"         }
+  ]
+}

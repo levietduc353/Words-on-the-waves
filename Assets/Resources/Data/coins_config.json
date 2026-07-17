@@ -1,0 +1,11 @@
+{
+  "startingCoins": 200,
+  "minBookSellPrice": 5,
+  "adviceBonusFlat": 10,
+  "locationUnlockCosts": {
+    "beach":   0,
+    "cafe":    500,
+    "city":    800,
+    "station": 1500
+  }
+}

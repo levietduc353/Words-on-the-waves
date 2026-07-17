@@ -1,0 +1,11 @@
+﻿{
+  "books": [
+    { "id": "book_crime",   "genre": "Crime",   "sellPrice": 22, "description": "Nhung manh moi an giau sau moi su that." },
+    { "id": "book_drama",   "genre": "Drama",   "sellPrice": 20, "description": "Cau chuyen ve nhung moi quan he va lua chon cua con nguoi." },
+    { "id": "book_fact",    "genre": "Fact",    "sellPrice": 28, "description": "Su that thu vi ve the gioi ma ban chua tung biet." },
+    { "id": "book_fantasy", "genre": "Fantasy", "sellPrice": 35, "description": "Hanh trinh den vung dat phep thuat huyen bi." },
+    { "id": "book_classic", "genre": "Classic", "sellPrice": 40, "description": "Kiet tac van hoc da vuot qua thu thach cua thoi gian." },
+    { "id": "book_kids",    "genre": "Kids",    "sellPrice": 12, "description": "Cau chuyen nhe nhang ve tinh ban danh cho thieu nhi." },
+    { "id": "book_travel",  "genre": "Travel",  "sellPrice": 26, "description": "Kham pha the gioi qua nhung trang sach day mau sac." }
+  ]
+}

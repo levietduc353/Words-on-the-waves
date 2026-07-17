@@ -10,6 +10,18 @@ namespace WordsOnTheWaves.Events
         // ==========================================
         
         /// <summary>
+        /// Phát ra khi DataManager load xong toàn bộ JSON config.
+        /// Các system cần data (UI, SpawnSystem...) nên lắng nghe event này trước khi init.
+        /// </summary>
+        public static Action OnDataLoaded;
+
+        /// <summary>
+        /// Phát ra khi số lượng sách trong kho thay đổi.
+        /// Tham số: bookId (string), số lượng mới (int).
+        /// </summary>
+        public static Action<string, int> OnInventoryChanged;
+
+        /// <summary>
         /// Phát ra khi người chơi ấn Start Game ở Main Menu
         /// </summary>
         public static Action OnStartGameClicked;

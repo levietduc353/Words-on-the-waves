@@ -1,0 +1,53 @@
+﻿{
+  "greetings": {
+    "Normal":     ["Cho toi xem sach voi!", "Toi muon mua mot cuon sach.", "Co sach gi hay khong?"],
+    "NeedAdvice": ["Ban oi, toi dang can tu van...", "Ban co the giup toi khong?", "Toi khong biet nen chon cuon nao..."],
+    "Special":    ["...Toi dang tim thu gi do dac biet.", "Ho noi o day co the tim duoc thu toi can.", "Toi da nghe tieng ve noi nay."]
+  },
+  "genreHints": {
+    "Crime":    [
+      "Toi thich nhung cau chuyen doi hoi tri suy luan.",
+      "Phai co bi an, co manh moi an giau dau do.",
+      "Cai gi do khien toi phai nghi nhieu, can tim ra su that."
+    ],
+    "Drama":    [
+      "Gi do cham den cam xuc, sau sac mot chut.",
+      "Cau chuyen ve con nguoi va moi quan he.",
+      "Toi muon khoc duoc, cuoi duoc trong cung mot cuon sach."
+    ],
+    "Fact":     [
+      "Toi muon hoc them dieu gi do moi.",
+      "Kien thuc thuc te, khong can hu cau.",
+      "Cai gi do mo rong hieu biet cua toi ve the gioi."
+    ],
+    "Fantasy":  [
+      "Vung dat xa xoi, phep thuat, dieu huyen bi.",
+      "Thu gi do khien toi thoat khoi thuc tai.",
+      "Nhung sinh vat ky la, nhung the gioi chua ai kham pha."
+    ],
+    "Classic":  [
+      "Nhung tac pham da vuot qua thoi gian.",
+      "Cai gi do co chieu sau, da duoc kiem chung.",
+      "Van chuong co dien, loai ma nguoi ta van nhac den sau hang tram nam."
+    ],
+    "Kids":     [
+      "Cho con toi, cai gi nhe nhang, vui ve.",
+      "Truyen tranh hoac truyen ngan cho tre em.",
+      "Con toi thich dong vat va thien nhien."
+    ],
+    "Travel":   [
+      "Toi muon di den noi nao do du chi qua trang sach.",
+      "Kham pha the gioi ma chua can roi ghe.",
+      "Nhung vung dat la, phong tuc khac biet, hanh trinh dai."
+    ]
+  },
+  "responses": {
+    "accept": ["Dung roi! Cam on ban rat nhieu!", "Chinh xac! Ban that su hieu toi.", "Oa, dung y toi roi!"],
+    "reject":  ["Hmm, khong phai thu toi dang tim.", "Tiec qua, khong phu hop lam voi toi.", "Chua dung y lam..."]
+  },
+  "farewell": {
+    "Normal":     ["Cam on!", "Hen gap lai.", "Tot qua, di day!"],
+    "NeedAdvice": ["Cam on ban da tu van!", "Toi se doc ngay toi nay.", "Ban that su hieu sach!"],
+    "Special":    ["...Toi se nho dieu nay.", "Hay giu thu nay. Nhu mot loi cam on.", "Nguoi ban sach tot bung."]
+  }
+}
