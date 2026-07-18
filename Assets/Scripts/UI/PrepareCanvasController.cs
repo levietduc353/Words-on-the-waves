@@ -9,7 +9,7 @@ namespace WordsOnTheWaves.UI
     public class PrepareCanvasController : MonoBehaviour
     {
         [SerializeField] private GameObject _preparePanel;
-        [SerializeField] private Button _confirmButton;
+        [SerializeField] private Button     _confirmButton;
 
         private void OnEnable()
         {
@@ -24,22 +24,16 @@ namespace WordsOnTheWaves.UI
         private void Awake()
         {
             if (_preparePanel != null)
-            {
                 _preparePanel.SetActive(false);
-            }
         }
 
         private void Start()
         {
             if (GameManager.Instance != null)
-            {
                 HandleGameStateChanged(GameManager.Instance.CurrentStateName);
-            }
 
             if (_confirmButton != null)
-            {
                 _confirmButton.onClick.AddListener(OnConfirmButtonClicked);
-            }
         }
 
         private void OnConfirmButtonClicked()
@@ -47,7 +41,6 @@ namespace WordsOnTheWaves.UI
             string sceneToLoad = GameManager.Instance.TargetSceneToLoad;
             if (!string.IsNullOrEmpty(sceneToLoad))
             {
-                // Chuyển sang scene bãi biển đã chọn từ map
                 SceneManager.LoadScene(sceneToLoad);
             }
             else
@@ -59,16 +52,7 @@ namespace WordsOnTheWaves.UI
         private void HandleGameStateChanged(string stateName)
         {
             if (_preparePanel == null) return;
-
-            // Chỉ hiện PrepareCanvas khi ở PreparationState
-            if (stateName == "PreparationState")
-            {
-                _preparePanel.SetActive(true);
-            }
-            else
-            {
-                _preparePanel.SetActive(false);
-            }
+            _preparePanel.SetActive(stateName == "PreparationState");
         }
     }
 }

@@ -53,6 +53,18 @@ namespace WordsOnTheWaves.Events
         public static Action<string> OnDecorInventoryChanged;
 
         /// <summary>
+        /// Phát ra khi player đặt thành công một cuốn sách lên kệ từ inventory UI.
+        /// Tham số: bookId vừa được đặt.
+        /// </summary>
+        public static Action<string> OnBookPlaced;
+
+        /// <summary>
+        /// Phát ra khi player nhấc một cuốn sách đang trên kệ xuống.
+        /// Tham số: bookId vừa được nhấc.
+        /// </summary>
+        public static Action<string> OnBookPickedFromSlot;
+
+        /// <summary>
         /// Phát ra khi cập nhật số tiền hiện tại. Tham số: Số tiền mới.
         /// </summary>
         public static Action<int> OnMoneyUpdated;
