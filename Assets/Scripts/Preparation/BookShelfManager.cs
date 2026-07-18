@@ -47,5 +47,29 @@ namespace WordsOnTheWaves.Preparation
 
             return (nearest, minDist);
         }
+
+        /// <summary>
+        /// Tìm slot trống gần nhất theo screen-space, duyệt cả 2 kệ.
+        /// </summary>
+        public (BookSlot slot, float screenDist) GetNearestEmptySlotByScreen(
+            Vector2 mouseScreenPos, Camera cam)
+        {
+            BookSlot nearest = null;
+            float    minDist = float.MaxValue;
+
+            foreach (var shelf in _shelves)
+            {
+                if (shelf == null) continue;
+
+                var (slot, dist) = shelf.GetNearestEmptySlotByScreen(mouseScreenPos, cam);
+                if (slot != null && dist < minDist)
+                {
+                    minDist = dist;
+                    nearest = slot;
+                }
+            }
+
+            return (nearest, minDist);
+        }
     }
 }

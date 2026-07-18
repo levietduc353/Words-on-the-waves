@@ -24,8 +24,11 @@ namespace WordsOnTheWaves.Preparation
         [Tooltip("Y-coordinate của mặt phẳng nằm ngang dùng để tính vị trí chuột trong 3D.")]
         [SerializeField] private float _dragPlaneY = 0f;
 
-        [Tooltip("Khoảng cách tối đa (world unit) để ghost snap về slot.")]
-        [SerializeField] private float _snapThreshold = 0.8f;
+        [Tooltip("Khoảng cách tối đa tính bằng pixel màn hình để ghost snap về slot.")]
+        [SerializeField] private float _snapScreenPixels = 120f;
+
+        [Tooltip("Rotation bù khi spawn sách (ghost và placed). Chỉnh để gáy sách hướng đúng.")]
+        [SerializeField] private Vector3 _bookRotationOffset = new Vector3(-90f, 0f, 0f);
 
         // ==========================================
         // DRAG STATE
@@ -135,7 +138,7 @@ namespace WordsOnTheWaves.Preparation
                 var spawnPos = GetMouseWorldPos();
 
                 // Giữ đúng rotation gốc của prefab thay vì Quaternion.identity
-                _ghostBook = Instantiate(prefab, spawnPos, prefab.transform.rotation);
+                _ghostBook = Instantiate(prefab, spawnPos, GetSpawnRotation(prefab));
 
                 // Tắt Collider — tránh Raycast nhầm ghost
                 foreach (var col in _ghostBook.GetComponentsInChildren<Collider>())
@@ -208,14 +211,17 @@ namespace WordsOnTheWaves.Preparation
 
         private void UpdateSnapPreview()
         {
-            var mouseWorldPos = GetMouseWorldPos();
-            var (nearestSlot, dist) = BookShelfManager.Instance.GetNearestEmptySlot(mouseWorldPos);
+            Vector2 mouseScreen = GetMouseScreenPos();
+            var cam = Camera.main;
+
+            var (nearestSlot, screenDist) =
+                BookShelfManager.Instance.GetNearestEmptySlotByScreen(mouseScreen, cam);
 
             // Tắt highlight slot cũ
             if (_currentTargetSlot != null && _currentTargetSlot != nearestSlot)
                 _currentTargetSlot.Highlight(false);
 
-            if (nearestSlot != null && dist <= _snapThreshold)
+            if (nearestSlot != null && screenDist <= _snapScreenPixels)
             {
                 _currentTargetSlot = nearestSlot;
                 _currentTargetSlot.Highlight(true);
@@ -239,7 +245,7 @@ namespace WordsOnTheWaves.Preparation
                 var bookObj = Instantiate(
                     _draggingPrefab,
                     _currentTargetSlot.transform.position,
-                    _draggingPrefab.transform.rotation);
+                    GetSpawnRotation(_draggingPrefab));
 
                 // Bắt buộc bật collider — phòng trường hợp prefab được lưu với collider tắt
                 foreach (var col in bookObj.GetComponentsInChildren<Collider>(true))
@@ -273,7 +279,7 @@ namespace WordsOnTheWaves.Preparation
                 var bookObj = Instantiate(
                     _draggingPrefab,
                     _sourceSlot.transform.position,
-                    _draggingPrefab.transform.rotation);
+                    GetSpawnRotation(_draggingPrefab));
 
                 // Bắt buộc bật collider khi khôi phục về slot cũ
                 foreach (var col in bookObj.GetComponentsInChildren<Collider>(true))
@@ -343,6 +349,14 @@ namespace WordsOnTheWaves.Preparation
         {
             return EventSystem.current != null &&
                    EventSystem.current.IsPointerOverGameObject();
+        }
+
+        /// <summary>
+        /// Tính rotation cuối cùng = rotation gốc của prefab + offset điều chỉnh.
+        /// </summary>
+        private Quaternion GetSpawnRotation(GameObject prefab)
+        {
+            return Quaternion.Euler(_bookRotationOffset) * prefab.transform.rotation;
         }
 
     }
