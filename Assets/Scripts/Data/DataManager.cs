@@ -34,6 +34,9 @@ namespace WordsOnTheWaves.Core
         /// <summary>Tất cả kỷ vật, tra cứu theo memento ID.</summary>
         public IReadOnlyDictionary<string, MementoData> Mementos => _mementos;
 
+        /// <summary>Danh sách decorId mà player đang sở hữu.</summary>
+        public IReadOnlyList<string> OwnedDecors => _decorInventory;
+
         /// <summary>Toàn bộ dialogue của game.</summary>
         public DialogueData Dialogues => _dialogues;
 
@@ -67,6 +70,9 @@ namespace WordsOnTheWaves.Core
         // Tồn kho sách hiện tại của người chơi (mutable — thay đổi trong gameplay)
         // Key: book id | Value: số lượng đang có
         private readonly Dictionary<string, int> _bookInventory = new Dictionary<string, int>();
+
+        // Danh sách decorId mà player đang sở hữu
+        private readonly List<string> _decorInventory = new List<string>();
 
         // ==========================================
         // UNITY LIFECYCLE
@@ -102,6 +108,7 @@ namespace WordsOnTheWaves.Core
             LoadDialogues();
             LoadCoinConfig();
             LoadBookInventory();
+            LoadDecorInventory();
 
             Debug.Log($"[DataManager] Loaded: {_books.Count} books | {_crates.Count} crates | " +
                       $"{_locations.Count} locations | {_decorItems.Count} decor | {_mementos.Count} mementos");
@@ -217,6 +224,18 @@ namespace WordsOnTheWaves.Core
                 _bookInventory[entry.Key] = entry.Value;
         }
 
+        private void LoadDecorInventory()
+        {
+            var text = LoadJson("Data/decor_inv");
+            if (text == null) return;
+
+            var wrapper = JsonConvert.DeserializeObject<DecorInventoryWrapper>(text);
+            if (wrapper?.ownedDecors == null) return;
+
+            foreach (var decorId in wrapper.ownedDecors)
+                _decorInventory.Add(decorId);
+        }
+
         /// <summary>Đọc TextAsset từ Resources, trả về null nếu không tìm thấy.</summary>
         private string LoadJson(string resourcePath)
         {
@@ -283,6 +302,30 @@ namespace WordsOnTheWaves.Core
         /// Snapshot toàn bộ inventory hiện tại (read-only view).
         /// </summary>
         public IReadOnlyDictionary<string, int> GetInventorySnapshot() => _bookInventory;
+
+        /// <summary>
+        /// Thêm một decor item vào inventory. Bỏ qua nếu đã sở hữu.
+        /// Phát OnDecorInventoryChanged sau khi cập nhật.
+        /// </summary>
+        public void AddDecorToInventory(string decorId)
+        {
+            if (string.IsNullOrEmpty(decorId)) return;
+
+            if (_decorInventory.Contains(decorId))
+            {
+                Debug.LogWarning($"[DataManager] Decor '{decorId}' đã có trong inventory.");
+                return;
+            }
+
+            if (!_decorItems.ContainsKey(decorId))
+            {
+                Debug.LogError($"[DataManager] Decor ID không tồn tại trong config: '{decorId}'");
+                return;
+            }
+
+            _decorInventory.Add(decorId);
+            EventManager.OnDecorInventoryChanged?.Invoke(decorId);
+        }
 
         /// <summary>
         /// Weighted random chọn loại khách hàng dựa trên spawnWeight trong config.
@@ -380,6 +423,7 @@ namespace WordsOnTheWaves.Core
         private class DecorItemDataListWrapper { public List<DecorItemData> decorItems; }
         private class MementoDataListWrapper   { public List<MementoData>  mementos;   }
         private class BookInventoryWrapper     { public Dictionary<string, int> inventory; }
+        private class DecorInventoryWrapper    { public List<string> ownedDecors; }
 
         private class CustomerConfig
         {

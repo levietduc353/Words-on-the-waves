@@ -88,7 +88,16 @@ namespace WordsOnTheWaves.UI
             // Gán sự kiện nút Back của Decor
             if (_decorBackButton != null)
             {
-                _decorBackButton.onClick.AddListener(() => EventManager.OnBackToMapClicked?.Invoke());
+                Debug.Log("[MapCanvas] decorBackButton listener REGISTERED");
+                _decorBackButton.onClick.AddListener(() =>
+                {
+                    Debug.Log("[MapCanvas] decorBackButton CLICKED → firing OnBackToMapClicked");
+                    EventManager.OnBackToMapClicked?.Invoke();
+                });
+            }
+            else
+            {
+                Debug.LogError("[MapCanvas] _decorBackButton chưa được gán trong Inspector!");
             }
         }
 
@@ -99,6 +108,7 @@ namespace WordsOnTheWaves.UI
 
         private void HandleGameStateChanged(string stateName)
         {
+            Debug.Log($"[MapCanvas] HandleGameStateChanged: {stateName}");
             if (_mapPanel != null)
             {
                 _mapPanel.SetActive(stateName == "MapTravelState");

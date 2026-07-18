@@ -47,6 +47,12 @@ namespace WordsOnTheWaves.Events
         public static Action<string> OnGameStateChanged;
 
         /// <summary>
+        /// Phát ra khi danh sách decor trong inventory thay đổi.
+        /// Tham số: decorId vừa được thêm vào.
+        /// </summary>
+        public static Action<string> OnDecorInventoryChanged;
+
+        /// <summary>
         /// Phát ra khi cập nhật số tiền hiện tại. Tham số: Số tiền mới.
         /// </summary>
         public static Action<int> OnMoneyUpdated;
