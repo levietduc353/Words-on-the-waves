@@ -10,23 +10,25 @@ namespace WordsOnTheWaves.Preparation
     [RequireComponent(typeof(Collider))]
     public class PlacedBook : MonoBehaviour
     {
-        public string    BookId    { get; private set; }
-        public BookGenre BookGenre { get; private set; }
-        public BookSlot  OwnerSlot { get; private set; }
+        public string    BookId     { get; private set; }
+        public string    InstanceId { get; private set; }
+        public BookGenre BookGenre  { get; private set; }
+        public BookSlot  OwnerSlot  { get; private set; }
 
         /// <summary>Prefab gốc của cuốn sách này — dùng lại khi nhặt từ kệ.</summary>
-        public GameObject Prefab   { get; private set; }
+        public GameObject Prefab    { get; private set; }
 
         /// <summary>
         /// Khởi tạo dữ liệu sau khi Instantiate.
         /// Gọi bởi BookDragController.ConfirmDrop() và CancelDrag().
         /// </summary>
-        public void Init(string bookId, BookGenre bookGenre, BookSlot ownerSlot, GameObject prefab)
+        public void Init(string bookId, string instanceId, BookGenre bookGenre, BookSlot ownerSlot, GameObject prefab)
         {
-            BookId    = bookId;
-            BookGenre = bookGenre;
-            OwnerSlot = ownerSlot;
-            Prefab    = prefab;
+            BookId     = bookId;
+            InstanceId = instanceId;
+            BookGenre  = bookGenre;
+            OwnerSlot  = ownerSlot;
+            Prefab     = prefab;
         }
     }
 }

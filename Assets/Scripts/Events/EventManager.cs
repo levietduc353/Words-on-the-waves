@@ -54,15 +54,15 @@ namespace WordsOnTheWaves.Events
 
         /// <summary>
         /// Phát ra khi player đặt thành công một cuốn sách lên kệ từ inventory UI.
-        /// Tham số: bookId vừa được đặt.
+        /// Tham số: bookId, instanceId (UI id để phân biệt các nút)
         /// </summary>
-        public static Action<string> OnBookPlaced;
+        public static Action<string, string> OnBookPlaced;
 
         /// <summary>
         /// Phát ra khi player nhấc một cuốn sách đang trên kệ xuống.
-        /// Tham số: bookId vừa được nhấc.
+        /// Tham số: bookId, instanceId
         /// </summary>
-        public static Action<string> OnBookPickedFromSlot;
+        public static Action<string, string> OnBookPickedFromSlot;
 
         /// <summary>
         /// Phát ra khi cập nhật số tiền hiện tại. Tham số: Số tiền mới.
@@ -94,5 +94,21 @@ namespace WordsOnTheWaves.Events
         /// Phát ra khi kết thúc thao tác Drop (Thả). Tham số: GameObject vừa thả.
         /// </summary>
         public static Action<GameObject> OnObjectDropped;
+
+        // ==========================================
+        // NPC EVENTS
+        // ==========================================
+
+        /// <summary>
+        /// Phát ra khi NPC khách hàng đi đến điểm dừng (posStop).
+        /// Tham số: GameObject của NPC.
+        /// </summary>
+        public static Action<GameObject> OnCustomerArrived;
+
+        /// <summary>
+        /// Phát ra khi NPC khách hàng đã đi khỏi tiệm (về posB và bị trả lại pool).
+        /// Tham số: GameObject của NPC.
+        /// </summary>
+        public static Action<GameObject> OnCustomerLeft;
     }
 }

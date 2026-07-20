@@ -27,27 +27,17 @@ namespace WordsOnTheWaves.UI
         [SerializeField] private List<GameObject> _bookPrefabs = new List<GameObject>();
 
         private Button _button;
+        private string _uiInstanceId;
 
         private void Awake()
         {
             _button = GetComponent<Button>();
+            _uiInstanceId = System.Guid.NewGuid().ToString();
         }
 
         private void Start()
         {
             _button.onClick.AddListener(OnClicked);
-        }
-
-        private void OnEnable()
-        {
-            EventManager.OnBookPlaced         += OnBookPlaced;
-            EventManager.OnBookPickedFromSlot += OnBookPickedFromSlot;
-        }
-
-        private void OnDisable()
-        {
-            EventManager.OnBookPlaced         -= OnBookPlaced;
-            EventManager.OnBookPickedFromSlot -= OnBookPickedFromSlot;
         }
 
         private void OnClicked()
@@ -61,7 +51,7 @@ namespace WordsOnTheWaves.UI
                 return;
             }
 
-            BookDragController.Instance.BeginDragFromUI(_bookId, _bookGenre, prefab);
+            BookDragController.Instance.BeginDragFromUI(_bookId, _uiInstanceId, _bookGenre, prefab);
         }
 
         private GameObject GetRandomPrefab()
@@ -70,18 +60,5 @@ namespace WordsOnTheWaves.UI
             return _bookPrefabs[Random.Range(0, _bookPrefabs.Count)];
         }
 
-        // Sách đã đặt thành công lên kệ → ẩn button
-        private void OnBookPlaced(string bookId)
-        {
-            if (bookId == _bookId)
-                gameObject.SetActive(false);
-        }
-
-        // Sách được nhấc khỏi kệ trả về UI → hiện lại button
-        private void OnBookPickedFromSlot(string bookId)
-        {
-            if (bookId == _bookId)
-                gameObject.SetActive(true);
-        }
     }
 }

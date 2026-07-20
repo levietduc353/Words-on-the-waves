@@ -36,6 +36,7 @@ namespace WordsOnTheWaves.Preparation
 
         private bool      _isDragging;
         private string    _draggingBookId;
+        private string    _draggingInstanceId;
         private BookGenre _draggingGenre;
         private GameObject _draggingPrefab;
 
@@ -86,7 +87,7 @@ namespace WordsOnTheWaves.Preparation
         /// Bắt đầu drag từ UIBookButton. Gọi bởi UIBookButton.OnClick().
         /// Nếu đang drag rồi, thay ghost bằng sách mới.
         /// </summary>
-        public void BeginDragFromUI(string bookId, BookGenre genre, GameObject prefab)
+        public void BeginDragFromUI(string bookId, string instanceId, BookGenre genre, GameObject prefab)
         {
             // Nếu cùng cuốn sách đang giữ → hủy (toggle off)
             if (_isDragging && _draggingBookId == bookId && _sourceSlot == null)
@@ -98,7 +99,7 @@ namespace WordsOnTheWaves.Preparation
             if (_isDragging) ClearDragState(destroyGhost: true);
 
             _sourceSlot = null;
-            BeginDragInternal(bookId, genre, prefab);
+            BeginDragInternal(bookId, instanceId, genre, prefab);
         }
 
         /// <summary>
@@ -113,21 +114,22 @@ namespace WordsOnTheWaves.Preparation
             _sourceSlot.ReleaseBook();
 
             var prefab = placedBook.Prefab;
-            BeginDragInternal(placedBook.BookId, placedBook.BookGenre, prefab);
+            BeginDragInternal(placedBook.BookId, placedBook.InstanceId, placedBook.BookGenre, prefab);
 
             // Destroy object cũ, ghost sẽ đại diện
             Destroy(placedBook.gameObject);
 
-            EventManager.OnBookPickedFromSlot?.Invoke(placedBook.BookId);
+            EventManager.OnBookPickedFromSlot?.Invoke(placedBook.BookId, placedBook.InstanceId);
         }
 
         // ==========================================
         // PRIVATE LOGIC
         // ==========================================
 
-        private void BeginDragInternal(string bookId, BookGenre genre, GameObject prefab)
+        private void BeginDragInternal(string bookId, string instanceId, BookGenre genre, GameObject prefab)
         {
             _draggingBookId = bookId;
+            _draggingInstanceId = instanceId;
             _draggingGenre  = genre;
             _draggingPrefab = prefab;
             _isDragging     = true;
@@ -253,13 +255,13 @@ namespace WordsOnTheWaves.Preparation
 
                 var placedBook = bookObj.GetComponent<PlacedBook>();
                 if (placedBook != null)
-                    placedBook.Init(_draggingBookId, _draggingGenre, _currentTargetSlot, _draggingPrefab);
+                    placedBook.Init(_draggingBookId, _draggingInstanceId, _draggingGenre, _currentTargetSlot, _draggingPrefab);
 
                 _currentTargetSlot.PlaceBook(bookObj);
             }
 
             if (_sourceSlot == null)
-                EventManager.OnBookPlaced?.Invoke(_draggingBookId);
+                EventManager.OnBookPlaced?.Invoke(_draggingBookId, _draggingInstanceId);
 
             ClearDragState(destroyGhost: false);
         }
@@ -287,10 +289,10 @@ namespace WordsOnTheWaves.Preparation
 
                 var placedBook = bookObj.GetComponent<PlacedBook>();
                 if (placedBook != null)
-                    placedBook.Init(_draggingBookId, _draggingGenre, _sourceSlot, _draggingPrefab);
+                    placedBook.Init(_draggingBookId, _draggingInstanceId, _draggingGenre, _sourceSlot, _draggingPrefab);
 
                 _sourceSlot.PlaceBook(bookObj);
-                EventManager.OnBookPickedFromSlot?.Invoke(_draggingBookId);
+                EventManager.OnBookPickedFromSlot?.Invoke(_draggingBookId, _draggingInstanceId);
             }
             // Nếu drag từ UI → không cần phát event, UIBookButton chưa ẩn
 
@@ -305,6 +307,7 @@ namespace WordsOnTheWaves.Preparation
             _isDragging        = false;
             _ghostBook         = null;
             _draggingBookId    = null;
+            _draggingInstanceId = null;
             _draggingPrefab    = null;
             _sourceSlot        = null;
             _currentTargetSlot = null;

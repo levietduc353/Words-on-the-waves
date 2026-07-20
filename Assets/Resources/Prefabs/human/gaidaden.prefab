@@ -1221,6 +1221,7 @@ GameObject:
   - component: {fileID: 3603838251680139527}
   - component: {fileID: -4871763860629133913}
   - component: {fileID: 8049823336077459244}
+  - component: {fileID: 7465077705991593979}
   m_Layer: 0
   m_Name: gaidaden
   m_TagString: Untagged
@@ -1257,7 +1258,7 @@ Animator:
   m_Avatar: {fileID: 9000000, guid: c510d7afbe1331a4eb3c5631724b74c8, type: 3}
   m_Controller: {fileID: 9100000, guid: 67ba98ecd3710ce4987ae6eba67e301c, type: 2}
   m_CullingMode: 1
-  m_UpdateMode: 0
+  m_UpdateMode: 1
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -1292,7 +1293,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!65 &8049823336077459244
 BoxCollider:
@@ -1315,6 +1316,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.3574524, y: 0.4965601, z: 0.14318848}
   m_Center: {x: -0.07234955, y: 0.25171995, z: 0.024780273}
+--- !u!114 &7465077705991593979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8045851931099367879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a8f083a6d493dc44b49b090facd9a49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WordsOnTheWaves.NPCs.CustomerController
+  _walkSpeed: 2
+  _waitDuration: 5
+  _animator: {fileID: 3603838251680139527}
 --- !u!1 &8057052573304904260
 GameObject:
   m_ObjectHideFlags: 0
