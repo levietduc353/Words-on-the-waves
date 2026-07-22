@@ -4,6 +4,8 @@ using UnityEngine.UI;
 using WordsOnTheWaves.Data;
 using WordsOnTheWaves.Events;
 using WordsOnTheWaves.Preparation;
+using WordsOnTheWaves.Core;
+using TMPro;
 
 namespace WordsOnTheWaves.UI
 {
@@ -26,6 +28,10 @@ namespace WordsOnTheWaves.UI
         [Tooltip("Danh sách prefab 3D — mỗi lần click sẽ chọn ngẫu nhiên 1 cái.")]
         [SerializeField] private List<GameObject> _bookPrefabs = new List<GameObject>();
 
+        [Header("UI Refs")]
+        [Tooltip("Text hiển thị số lượng sách còn trong kho.")]
+        [SerializeField] private TMP_Text _countText;
+
         private Button _button;
         private string _uiInstanceId;
 
@@ -35,14 +41,36 @@ namespace WordsOnTheWaves.UI
             _uiInstanceId = System.Guid.NewGuid().ToString();
         }
 
+        private void OnEnable()
+        {
+            EventManager.OnInventoryChanged += HandleInventoryChanged;
+            EventManager.OnDataLoaded += HandleDataLoaded;
+            UpdateCountDisplay();
+        }
+
+        private void OnDisable()
+        {
+            EventManager.OnInventoryChanged -= HandleInventoryChanged;
+            EventManager.OnDataLoaded -= HandleDataLoaded;
+        }
+
         private void Start()
         {
             _button.onClick.AddListener(OnClicked);
+            UpdateCountDisplay();
         }
 
         private void OnClicked()
         {
             if (BookDragController.Instance == null) return;
+            if (DataManager.Instance == null) return;
+
+            int currentCount = DataManager.Instance.GetBookCount(_bookId);
+            if (currentCount <= 0)
+            {
+                Debug.Log($"[UIBookButton] Hết sách '{_bookId}' trong kho!");
+                return;
+            }
 
             var prefab = GetRandomPrefab();
             if (prefab == null)
@@ -58,6 +86,27 @@ namespace WordsOnTheWaves.UI
         {
             if (_bookPrefabs == null || _bookPrefabs.Count == 0) return null;
             return _bookPrefabs[Random.Range(0, _bookPrefabs.Count)];
+        }
+
+        private void HandleInventoryChanged(string bookId, int newAmount)
+        {
+            if (bookId == _bookId)
+            {
+                UpdateCountDisplay();
+            }
+        }
+
+        private void HandleDataLoaded()
+        {
+            UpdateCountDisplay();
+        }
+
+        private void UpdateCountDisplay()
+        {
+            if (_countText == null || DataManager.Instance == null) return;
+            
+            int count = DataManager.Instance.GetBookCount(_bookId);
+            _countText.text = count.ToString();
         }
 
     }

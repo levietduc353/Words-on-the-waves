@@ -74,6 +74,10 @@ namespace WordsOnTheWaves.Core
         // Danh sách decorId mà player đang sở hữu
         private readonly List<string> _decorInventory = new List<string>();
 
+        // Lượng sách được xếp lên xe ngựa mang đi bãi biển (mutable)
+        // Key: book id | Value: số lượng
+        private readonly Dictionary<string, int> _wagonCargo = new Dictionary<string, int>();
+
         // ==========================================
         // UNITY LIFECYCLE
         // ==========================================
@@ -89,7 +93,14 @@ namespace WordsOnTheWaves.Core
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
+            EventManager.OnPreparationConfirmed += HandlePreparationConfirmed;
+
             LoadAllData();
+        }
+
+        private void OnDestroy()
+        {
+            EventManager.OnPreparationConfirmed -= HandlePreparationConfirmed;
         }
 
         // ==========================================
@@ -218,10 +229,16 @@ namespace WordsOnTheWaves.Core
             if (text == null) return;
 
             var wrapper = JsonConvert.DeserializeObject<BookInventoryWrapper>(text);
-            if (wrapper?.inventory == null) return;
+            if (wrapper?.inventory == null) 
+            {
+                Debug.LogError("[DataManager] Book inventory wrapper or inventory dictionary is null!");
+                return;
+            }
 
             foreach (var entry in wrapper.inventory)
                 _bookInventory[entry.Key] = entry.Value;
+            
+            Debug.Log($"[DataManager] Loaded {_bookInventory.Count} book inventory entries.");
         }
 
         private void LoadDecorInventory()
@@ -411,6 +428,56 @@ namespace WordsOnTheWaves.Core
                 return string.Empty;
 
             return lines[Random.Range(0, lines.Count)];
+        }
+
+        // ==========================================
+        // WAGON CARGO SYSTEM
+        // ==========================================
+
+        private void HandlePreparationConfirmed(Dictionary<string, int> cargoData)
+        {
+            _wagonCargo.Clear();
+            foreach (var entry in cargoData)
+            {
+                _wagonCargo[entry.Key] = entry.Value;
+            }
+            Debug.Log($"[DataManager] Bắt đầu chuyến đi với {_wagonCargo.Count} loại sách trên xe.");
+        }
+
+        /// <summary>
+        /// Snapshot lượng sách đang có trên xe (ServiceState dùng).
+        /// </summary>
+        public IReadOnlyDictionary<string, int> GetWagonCargo() => _wagonCargo;
+
+        /// <summary>
+        /// Bán một cuốn sách từ xe ngựa.
+        /// </summary>
+        public bool SellBookFromWagon(string bookId)
+        {
+            if (!_wagonCargo.TryGetValue(bookId, out int count) || count <= 0)
+                return false;
+            
+            _wagonCargo[bookId] = count - 1;
+            // Gọi sự kiện OnMoneyUpdated hoặc tương tự tùy logic
+            return true;
+        }
+
+        /// <summary>
+        /// Trả toàn bộ sách dư trên xe về kho khi kết thúc ngày.
+        /// </summary>
+        public void ReturnCargoToInventory()
+        {
+            int returnedCount = 0;
+            foreach (var entry in _wagonCargo)
+            {
+                if (entry.Value > 0)
+                {
+                    AddBooks(entry.Key, entry.Value);
+                    returnedCount += entry.Value;
+                }
+            }
+            _wagonCargo.Clear();
+            Debug.Log($"[DataManager] Kết thúc ngày. Đã trả {returnedCount} cuốn sách dư về kho.");
         }
 
         // ==========================================

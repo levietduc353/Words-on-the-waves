@@ -71,5 +71,29 @@ namespace WordsOnTheWaves.Preparation
 
             return (nearest, minDist);
         }
+
+        /// <summary>
+        /// Lấy tổng số lượng của từng loại sách đang nằm trên tất cả các kệ.
+        /// </summary>
+        public System.Collections.Generic.Dictionary<string, int> GetPlacedBooksCount()
+        {
+            var counts = new System.Collections.Generic.Dictionary<string, int>();
+
+            foreach (var shelf in _shelves)
+            {
+                if (shelf == null) continue;
+
+                var books = shelf.GetPlacedBooks();
+                foreach (var bookId in books)
+                {
+                    if (counts.ContainsKey(bookId))
+                        counts[bookId]++;
+                    else
+                        counts[bookId] = 1;
+                }
+            }
+
+            return counts;
+        }
     }
 }

@@ -47,16 +47,23 @@ namespace WordsOnTheWaves.Preparation
         /// </summary>
         public string ReleaseBook()
         {
-            string bookId = null;
-            if (_placedBookObj != null)
-            {
-                var pb = _placedBookObj.GetComponent<PlacedBook>();
-                if (pb != null) bookId = pb.BookId;
-            }
-
+            string bookId = GetBookId();
             _placedBookObj = null;
             _isOccupied    = false;
             return bookId;
+        }
+
+        /// <summary>
+        /// Lấy bookId của cuốn sách đang nằm trên slot (nếu có) mà không xóa nó.
+        /// </summary>
+        public string GetBookId()
+        {
+            if (_placedBookObj != null)
+            {
+                var pb = _placedBookObj.GetComponent<PlacedBook>();
+                if (pb != null) return pb.BookId;
+            }
+            return null;
         }
     }
 }

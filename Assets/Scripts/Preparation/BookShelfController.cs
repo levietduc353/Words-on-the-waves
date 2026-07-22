@@ -71,5 +71,23 @@ namespace WordsOnTheWaves.Preparation
 
             return (nearest, minDist);
         }
+
+        /// <summary>
+        /// Trả về danh sách bookId đang nằm trên các slot của kệ này.
+        /// </summary>
+        public System.Collections.Generic.List<string> GetPlacedBooks()
+        {
+            var result = new System.Collections.Generic.List<string>();
+            foreach (var slot in _slots)
+            {
+                if (slot.IsOccupied)
+                {
+                    string id = slot.GetBookId();
+                    if (!string.IsNullOrEmpty(id))
+                        result.Add(id);
+                }
+            }
+            return result;
+        }
     }
 }

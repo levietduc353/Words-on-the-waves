@@ -65,6 +65,18 @@ namespace WordsOnTheWaves.Events
         public static Action<string, string> OnBookPickedFromSlot;
 
         /// <summary>
+        /// Phát ra khi sách được trả về kho (nhấc từ kệ và thả ra ngoài).
+        /// Tham số: bookId
+        /// </summary>
+        public static Action<string> OnBookReturnedToInventory;
+
+        /// <summary>
+        /// Phát ra khi người chơi bấm Confirm ở màn hình Chuẩn bị.
+        /// Tham số: Dictionary chứa số lượng từng loại sách đã xếp lên kệ.
+        /// </summary>
+        public static Action<System.Collections.Generic.Dictionary<string, int>> OnPreparationConfirmed;
+
+        /// <summary>
         /// Phát ra khi cập nhật số tiền hiện tại. Tham số: Số tiền mới.
         /// </summary>
         public static Action<int> OnMoneyUpdated;

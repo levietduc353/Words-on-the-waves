@@ -17,6 +17,7 @@ namespace WordsOnTheWaves.NPCs
         [Header("Waypoints")]
         [SerializeField] private Transform _spawnPointA;
         [SerializeField] private Transform _stopPoint;
+        [SerializeField] private Transform _intermediatePointC;
         [SerializeField] private Transform _despawnPointB;
 
         [Header("Spawn Settings")]
@@ -86,12 +87,18 @@ namespace WordsOnTheWaves.NPCs
                 }
             }
 
+            // Kiểm tra posC có tồn tại không
+            bool hasPosC = _intermediatePointC != null;
+            Vector3 posC = hasPosC ? _intermediatePointC.position : Vector3.zero;
+
             // Khởi động vòng đời FSM cho NPC
             customer.InitAndStart(
                 spawnType,
                 _spawnPointA.position,
                 _stopPoint.position,
                 _despawnPointB.position,
+                hasPosC,
+                posC,
                 OnCustomerWalkOutComplete // Callback khi NPC đi tới posB
             );
         }

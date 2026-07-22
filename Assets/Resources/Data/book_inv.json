@@ -1,11 +1,11 @@
-﻿{
+{
   "inventory": {
-    "book_crime":   0,
-    "book_drama":   0,
-    "book_fact":    0,
-    "book_fantasy": 0,
-    "book_classic": 0,
-    "book_kids":    0,
-    "book_travel":  0
+    "book_crime": 2,
+    "book_drama": 2,
+    "book_fact": 2,
+    "book_fantasy": 2,
+    "book_classic": 2,
+    "book_kids": 2,
+    "book_travel": 2
   }
 }

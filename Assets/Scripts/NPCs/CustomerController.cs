@@ -10,6 +10,7 @@ namespace WordsOnTheWaves.NPCs
         Idle,
         WalkingIn,
         Waiting,
+        WalkingToC,
         WalkingOut
     }
 
@@ -27,9 +28,10 @@ namespace WordsOnTheWaves.NPCs
         private CustomerState _currentState = CustomerState.Idle;
         private Vector3 _targetPos;
         
-        // Waypoints
         private Vector3 _posStop;
         private Vector3 _posB;
+        private Vector3 _posC;
+        private bool _hasPosC;
         
         private float _waitTimer;
         private Action<CustomerController> _onWalkOutComplete;
@@ -48,12 +50,14 @@ namespace WordsOnTheWaves.NPCs
         /// Khởi tạo và bắt đầu chu trình của NPC.
         /// Gọi bởi CustomerSpawner khi lấy từ Pool.
         /// </summary>
-        public void InitAndStart(CustomerType type, Vector3 spawnPos, Vector3 posStop, Vector3 posB, Action<CustomerController> onComplete)
+        public void InitAndStart(CustomerType type, Vector3 spawnPos, Vector3 posStop, Vector3 posB, bool hasPosC, Vector3 posC, Action<CustomerController> onComplete)
         {
             CustomerType = type;
             transform.position = spawnPos;
             _posStop = posStop;
             _posB = posB;
+            _hasPosC = hasPosC;
+            _posC = posC;
             _onWalkOutComplete = onComplete;
             
             // Xoay mặt về hướng điểm đến
@@ -71,6 +75,9 @@ namespace WordsOnTheWaves.NPCs
                     break;
                 case CustomerState.Waiting:
                     HandleWaiting();
+                    break;
+                case CustomerState.WalkingToC:
+                    HandleWalkingToC();
                     break;
                 case CustomerState.WalkingOut:
                     HandleWalkingOut();
@@ -96,6 +103,12 @@ namespace WordsOnTheWaves.NPCs
                     EventManager.OnCustomerArrived?.Invoke(this.gameObject);
                     break;
                     
+                case CustomerState.WalkingToC:
+                    _targetPos = _posC;
+                    LookAtTarget(_posC);
+                    SetAnimationWalk(true);
+                    break;
+
                 case CustomerState.WalkingOut:
                     _targetPos = _posB;
                     LookAtTarget(_posB);
@@ -118,6 +131,22 @@ namespace WordsOnTheWaves.NPCs
         {
             _waitTimer -= Time.deltaTime;
             if (_waitTimer <= 0f)
+            {
+                if (_hasPosC)
+                {
+                    ChangeState(CustomerState.WalkingToC);
+                }
+                else
+                {
+                    ChangeState(CustomerState.WalkingOut);
+                }
+            }
+        }
+
+        private void HandleWalkingToC()
+        {
+            MoveTowardsTarget();
+            if (Vector3.Distance(transform.position, _targetPos) < 0.05f)
             {
                 ChangeState(CustomerState.WalkingOut);
             }

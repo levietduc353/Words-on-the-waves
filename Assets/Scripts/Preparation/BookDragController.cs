@@ -261,12 +261,15 @@ namespace WordsOnTheWaves.Preparation
             }
 
             if (_sourceSlot == null)
+            {
+                WordsOnTheWaves.Core.DataManager.Instance.RemoveBooks(_draggingBookId, 1);
                 EventManager.OnBookPlaced?.Invoke(_draggingBookId, _draggingInstanceId);
+            }
 
             ClearDragState(destroyGhost: false);
         }
 
-        /// <summary>Hủy drag: trả sách về slot cũ nếu từ kệ, UI tự lo nếu từ button.</summary>
+        /// <summary>Hủy drag: trả sách về kho nếu từ kệ, UI tự lo nếu từ button.</summary>
         private void CancelDrag()
         {
             if (_currentTargetSlot != null)
@@ -275,26 +278,13 @@ namespace WordsOnTheWaves.Preparation
                 _currentTargetSlot = null;
             }
 
-            // Nếu drag từ slot → khôi phục lại slot cũ
+            // Nếu drag từ slot → thay vì khôi phục lại kệ, hoàn trả sách về kho
             if (_sourceSlot != null && _draggingPrefab != null)
             {
-                var bookObj = Instantiate(
-                    _draggingPrefab,
-                    _sourceSlot.transform.position,
-                    GetSpawnRotation(_draggingPrefab));
-
-                // Bắt buộc bật collider khi khôi phục về slot cũ
-                foreach (var col in bookObj.GetComponentsInChildren<Collider>(true))
-                    col.enabled = true;
-
-                var placedBook = bookObj.GetComponent<PlacedBook>();
-                if (placedBook != null)
-                    placedBook.Init(_draggingBookId, _draggingInstanceId, _draggingGenre, _sourceSlot, _draggingPrefab);
-
-                _sourceSlot.PlaceBook(bookObj);
-                EventManager.OnBookPickedFromSlot?.Invoke(_draggingBookId, _draggingInstanceId);
+                WordsOnTheWaves.Core.DataManager.Instance.AddBooks(_draggingBookId, 1);
+                EventManager.OnBookReturnedToInventory?.Invoke(_draggingBookId);
             }
-            // Nếu drag từ UI → không cần phát event, UIBookButton chưa ẩn
+            // Nếu drag từ UI → không cần phát event, sách chưa bị trừ trong kho
 
             ClearDragState(destroyGhost: true);
         }

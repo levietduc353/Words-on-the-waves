@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using WordsOnTheWaves.Events;
 using WordsOnTheWaves.Core;
+using WordsOnTheWaves.Preparation;
 
 namespace WordsOnTheWaves.UI
 {
@@ -41,6 +42,13 @@ namespace WordsOnTheWaves.UI
             string sceneToLoad = GameManager.Instance.TargetSceneToLoad;
             if (!string.IsNullOrEmpty(sceneToLoad))
             {
+                // Lấy dữ liệu sách trên kệ
+                var cargoData = BookShelfManager.Instance.GetPlacedBooksCount();
+                
+                // Gửi event để DataManager lưu trữ thông tin mang sang scene mới
+                EventManager.OnPreparationConfirmed?.Invoke(cargoData);
+
+                // Chuyển scene
                 SceneManager.LoadScene(sceneToLoad);
             }
             else
