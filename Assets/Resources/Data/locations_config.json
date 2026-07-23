@@ -1,9 +1,24 @@
 {
   "locations": [
-    { "id": "beach",   "sceneName": "Beach",   "travelFee": 0   },
-    { "id": "cafe",    "sceneName": "Cafe",    "travelFee": 50  },
-    { "id": "city",    "sceneName": "City",    "travelFee": 80  },
-    { "id": "station", "sceneName": "Station", "travelFee": 150 }
+    {
+      "id": "beach",
+      "sceneName": "Beach",
+      "travelFee": 15
+    },
+    {
+      "id": "cafe",
+      "sceneName": "Cafe",
+      "travelFee": 13
+    },
+    {
+      "id": "city",
+      "sceneName": "City",
+      "travelFee": 6
+    },
+    {
+      "id": "station",
+      "sceneName": "Station",
+      "travelFee": 23
+    }
   ]
 }
-

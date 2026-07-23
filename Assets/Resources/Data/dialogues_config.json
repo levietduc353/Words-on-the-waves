@@ -1,53 +1,53 @@
-﻿{
+{
   "greetings": {
-    "Normal":     ["Cho toi xem sach voi!", "Toi muon mua mot cuon sach.", "Co sach gi hay khong?"],
-    "NeedAdvice": ["Ban oi, toi dang can tu van...", "Ban co the giup toi khong?", "Toi khong biet nen chon cuon nao..."],
-    "Special":    ["...Toi dang tim thu gi do dac biet.", "Ho noi o day co the tim duoc thu toi can.", "Toi da nghe tieng ve noi nay."]
+    "Normal":     ["Let me see some books!", "I'd like to buy a book.", "Do you have any good books?"],
+    "NeedAdvice": ["Excuse me, I need some advice...", "Can you help me out?", "I'm not sure which one to choose..."],
+    "Special":    ["...I'm looking for something special.", "I heard I could find what I need here.", "I've heard rumors about this place."]
   },
   "genreHints": {
     "Crime":    [
-      "Toi thich nhung cau chuyen doi hoi tri suy luan.",
-      "Phai co bi an, co manh moi an giau dau do.",
-      "Cai gi do khien toi phai nghi nhieu, can tim ra su that."
+      "I like stories that require deduction.",
+      "It needs mystery, hidden clues.",
+      "Something that makes me think, to uncover the truth."
     ],
     "Drama":    [
-      "Gi do cham den cam xuc, sau sac mot chut.",
-      "Cau chuyen ve con nguoi va moi quan he.",
-      "Toi muon khoc duoc, cuoi duoc trong cung mot cuon sach."
+      "Something that touches the heart, a bit deep.",
+      "A story about people and relationships.",
+      "I want to cry and laugh in the same book."
     ],
     "Fact":     [
-      "Toi muon hoc them dieu gi do moi.",
-      "Kien thuc thuc te, khong can hu cau.",
-      "Cai gi do mo rong hieu biet cua toi ve the gioi."
+      "I want to learn something new.",
+      "Practical knowledge, no fiction.",
+      "Something that broadens my understanding of the world."
     ],
     "Fantasy":  [
-      "Vung dat xa xoi, phep thuat, dieu huyen bi.",
-      "Thu gi do khien toi thoat khoi thuc tai.",
-      "Nhung sinh vat ky la, nhung the gioi chua ai kham pha."
+      "Faraway lands, magic, the unknown.",
+      "Something that lets me escape reality.",
+      "Strange creatures, unexplored worlds."
     ],
     "Classic":  [
-      "Nhung tac pham da vuot qua thoi gian.",
-      "Cai gi do co chieu sau, da duoc kiem chung.",
-      "Van chuong co dien, loai ma nguoi ta van nhac den sau hang tram nam."
+      "Masterpieces that stand the test of time.",
+      "Something profound, time-tested.",
+      "Classic literature, the kind people talk about for hundreds of years."
     ],
     "Kids":     [
-      "Cho con toi, cai gi nhe nhang, vui ve.",
-      "Truyen tranh hoac truyen ngan cho tre em.",
-      "Con toi thich dong vat va thien nhien."
+      "Something light and fun for my child.",
+      "Comics or short stories for kids.",
+      "My kid loves animals and nature."
     ],
     "Travel":   [
-      "Toi muon di den noi nao do du chi qua trang sach.",
-      "Kham pha the gioi ma chua can roi ghe.",
-      "Nhung vung dat la, phong tuc khac biet, hanh trinh dai."
+      "I want to travel, even if it's just through the pages of a book.",
+      "Exploring the world without leaving my chair.",
+      "Foreign lands, different customs, a long journey."
     ]
   },
   "responses": {
-    "accept": ["Dung roi! Cam on ban rat nhieu!", "Chinh xac! Ban that su hieu toi.", "Oa, dung y toi roi!"],
-    "reject":  ["Hmm, khong phai thu toi dang tim.", "Tiec qua, khong phu hop lam voi toi.", "Chua dung y lam..."]
+    "accept": ["That's it! Thank you so much!", "Exactly! You really understand me.", "Wow, spot on!"],
+    "reject":  ["Hmm, not what I'm looking for.", "Too bad, doesn't really fit me.", "Not quite right..."]
   },
   "farewell": {
-    "Normal":     ["Cam on!", "Hen gap lai.", "Tot qua, di day!"],
-    "NeedAdvice": ["Cam on ban da tu van!", "Toi se doc ngay toi nay.", "Ban that su hieu sach!"],
-    "Special":    ["...Toi se nho dieu nay.", "Hay giu thu nay. Nhu mot loi cam on.", "Nguoi ban sach tot bung."]
+    "Normal":     ["Thanks!", "See you later.", "Great, I'll be off!"],
+    "NeedAdvice": ["Thanks for the advice!", "I'll read it right tonight.", "You really know your books!"],
+    "Special":    ["...I will remember this.", "Keep this. As a token of my gratitude.", "Kind bookseller."]
   }
 }

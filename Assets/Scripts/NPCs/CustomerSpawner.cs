@@ -1,6 +1,7 @@
 using UnityEngine;
 using WordsOnTheWaves.Core;
 using WordsOnTheWaves.Data;
+using WordsOnTheWaves.Events;
 
 namespace WordsOnTheWaves.NPCs
 {
@@ -29,6 +30,27 @@ namespace WordsOnTheWaves.NPCs
 
         private ObjectPool<CustomerController>[] _customerPools;
         private float _spawnTimer;
+        private bool _isPausedByAdviceCustomer = false;
+
+        private void OnEnable()
+        {
+            EventManager.OnCustomerLeftCounter += HandleCustomerLeftCounter;
+        }
+
+        private void OnDisable()
+        {
+            EventManager.OnCustomerLeftCounter -= HandleCustomerLeftCounter;
+        }
+
+        private void HandleCustomerLeftCounter(GameObject customerObj)
+        {
+            var customer = customerObj.GetComponent<CustomerController>();
+            if (customer != null && (customer.CustomerType == CustomerType.NeedAdvice || customer.CustomerType == CustomerType.Special))
+            {
+                _isPausedByAdviceCustomer = false;
+                ResetSpawnTimer();
+            }
+        }
 
         private void Awake()
         {
@@ -50,7 +72,7 @@ namespace WordsOnTheWaves.NPCs
 
         private void Update()
         {
-            if (!isSpawningActive) return;
+            if (!isSpawningActive || _isPausedByAdviceCustomer) return;
 
             _spawnTimer -= Time.deltaTime;
             if (_spawnTimer <= 0f)
@@ -90,6 +112,12 @@ namespace WordsOnTheWaves.NPCs
             // Kiểm tra posC có tồn tại không
             bool hasPosC = _intermediatePointC != null;
             Vector3 posC = hasPosC ? _intermediatePointC.position : Vector3.zero;
+
+            if (spawnType == CustomerType.NeedAdvice || spawnType == CustomerType.Special)
+            {
+                _isPausedByAdviceCustomer = true;
+                Debug.Log($"[CustomerSpawner] Đã spawn khách hàng {spawnType}. Tạm dừng đếm ngược spawn mới!");
+            }
 
             // Khởi động vòng đời FSM cho NPC
             customer.InitAndStart(

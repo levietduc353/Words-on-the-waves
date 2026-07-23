@@ -1,3 +1,4 @@
+using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
@@ -43,11 +44,17 @@ namespace WordsOnTheWaves.Core
         /// <summary>Cấu hình tiền tệ.</summary>
         public CoinConfig CoinConfig => _coinConfig;
 
+        /// <summary>Số lượng tiền hiện tại của người chơi.</summary>
+        public int CurrentCoins => _playerProfile != null ? _playerProfile.currentCoins : 0;
+
         /// <summary>Danh sách quy tắc spawn khách hàng (dùng cho weighted random).</summary>
         public IReadOnlyList<CustomerSpawnRule> CustomerSpawnRules => _customerSpawnRules;
 
         /// <summary>Danh sách Special Customer với thông tin memento riêng.</summary>
         public IReadOnlyList<SpecialCustomerData> SpecialCustomers => _specialCustomers;
+
+        /// <summary>Truy xuất nhanh các thể loại gần giống.</summary>
+        public IReadOnlyDictionary<BookGenre, List<BookGenre>> GenreMatrix => _genreMatrix;
 
         // ==========================================
         // PRIVATE BACKING FIELDS
@@ -63,6 +70,8 @@ namespace WordsOnTheWaves.Core
         private CoinConfig             _coinConfig;
         private List<CustomerSpawnRule>    _customerSpawnRules = new List<CustomerSpawnRule>();
         private List<SpecialCustomerData>  _specialCustomers   = new List<SpecialCustomerData>();
+        private Dictionary<BookGenre, List<BookGenre>> _genreMatrix = new Dictionary<BookGenre, List<BookGenre>>();
+        private PlayerProfile          _playerProfile;
 
         // Cache danh sách sách theo genre để GetBooksByGenre() không phải duyệt lại mỗi lần
         private readonly Dictionary<BookGenre, List<BookData>> _booksByGenre = new Dictionary<BookGenre, List<BookData>>();
@@ -120,6 +129,8 @@ namespace WordsOnTheWaves.Core
             LoadCoinConfig();
             LoadBookInventory();
             LoadDecorInventory();
+            LoadGenreMatrix();
+            LoadPlayerProfile();
 
             Debug.Log($"[DataManager] Loaded: {_books.Count} books | {_crates.Count} crates | " +
                       $"{_locations.Count} locations | {_decorItems.Count} decor | {_mementos.Count} mementos");
@@ -225,7 +236,17 @@ namespace WordsOnTheWaves.Core
 
         private void LoadBookInventory()
         {
-            var text = LoadJson("Data/book_inv");
+            string savePath = Path.Combine(Application.persistentDataPath, "book_inv.json");
+            string text = null;
+            if (File.Exists(savePath))
+            {
+                text = File.ReadAllText(savePath);
+            }
+            else
+            {
+                text = LoadJson("Data/book_inv");
+            }
+
             if (text == null) return;
 
             var wrapper = JsonConvert.DeserializeObject<BookInventoryWrapper>(text);
@@ -241,6 +262,14 @@ namespace WordsOnTheWaves.Core
             Debug.Log($"[DataManager] Loaded {_bookInventory.Count} book inventory entries.");
         }
 
+        public void SaveBookInventory()
+        {
+            var wrapper = new BookInventoryWrapper { inventory = new Dictionary<string, int>(_bookInventory) };
+            string savePath = Path.Combine(Application.persistentDataPath, "book_inv.json");
+            string json = JsonConvert.SerializeObject(wrapper, Formatting.Indented);
+            File.WriteAllText(savePath, json);
+        }
+
         private void LoadDecorInventory()
         {
             var text = LoadJson("Data/decor_inv");
@@ -251,6 +280,89 @@ namespace WordsOnTheWaves.Core
 
             foreach (var decorId in wrapper.ownedDecors)
                 _decorInventory.Add(decorId);
+        }
+
+        private void LoadGenreMatrix()
+        {
+            var text = LoadJson("Data/genre_matrix_config");
+            if (text == null) return;
+            
+            var config = JsonConvert.DeserializeObject<GenreMatrixConfig>(text);
+            if (config?.matrix == null) return;
+
+            foreach (var item in config.matrix)
+            {
+                _genreMatrix[item.genre] = item.nearGenres;
+            }
+        }
+
+        private void LoadPlayerProfile()
+        {
+            string savePath = Path.Combine(Application.persistentDataPath, "player_save.json");
+            if (File.Exists(savePath))
+            {
+                try
+                {
+                    string json = File.ReadAllText(savePath);
+                    _playerProfile = JsonConvert.DeserializeObject<PlayerProfile>(json);
+                    Debug.Log($"[DataManager] Loaded PlayerProfile. Coins: {_playerProfile.currentCoins}");
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError($"[DataManager] Failed to load player profile: {e.Message}");
+                }
+            }
+
+            // Nếu file không tồn tại hoặc lỗi, khởi tạo mới
+            if (_playerProfile == null)
+            {
+                _playerProfile = new PlayerProfile
+                {
+                    currentCoins = _coinConfig != null ? _coinConfig.startingCoins : 0
+                };
+                SavePlayerProfile();
+                Debug.Log($"[DataManager] Created new PlayerProfile. Starting Coins: {_playerProfile.currentCoins}");
+            }
+            
+            // Kích hoạt event ban đầu
+            EventManager.OnMoneyUpdated?.Invoke(_playerProfile.currentCoins);
+        }
+
+        private void SavePlayerProfile()
+        {
+            if (_playerProfile == null) return;
+            string savePath = Path.Combine(Application.persistentDataPath, "player_save.json");
+            string json = JsonConvert.SerializeObject(_playerProfile, Formatting.Indented);
+            File.WriteAllText(savePath, json);
+        }
+
+        public void AddCoins(int amount)
+        {
+            if (_playerProfile == null) return;
+            _playerProfile.currentCoins += amount;
+            SavePlayerProfile();
+            EventManager.OnMoneyUpdated?.Invoke(_playerProfile.currentCoins);
+        }
+
+        public bool TrySpendCoins(int amount)
+        {
+            if (_playerProfile == null || _playerProfile.currentCoins < amount)
+                return false;
+
+            _playerProfile.currentCoins -= amount;
+            SavePlayerProfile();
+            EventManager.OnMoneyUpdated?.Invoke(_playerProfile.currentCoins);
+            return true;
+        }
+
+        public int GetTravelFeeBySceneName(string sceneName)
+        {
+            foreach (var loc in _locations.Values)
+            {
+                if (loc.sceneName == sceneName)
+                    return loc.travelFee;
+            }
+            return 0; // Default to 0 if not found
         }
 
         /// <summary>Đọc TextAsset từ Resources, trả về null nếu không tìm thấy.</summary>
@@ -278,6 +390,14 @@ namespace WordsOnTheWaves.Core
         }
 
         /// <summary>
+        /// Lấy danh sách các thể loại gần giống.
+        /// </summary>
+        public List<BookGenre> GetNearGenres(BookGenre genre)
+        {
+            return _genreMatrix.TryGetValue(genre, out var list) ? list : new List<BookGenre>();
+        }
+
+        /// <summary>
         /// Lấy số lượng sách đang có trong kho theo book ID.
         /// </summary>
         public int GetBookCount(string bookId)
@@ -295,6 +415,7 @@ namespace WordsOnTheWaves.Core
                 _bookInventory[bookId] = 0;
 
             _bookInventory[bookId] += amount;
+            SaveBookInventory();
             EventManager.OnInventoryChanged?.Invoke(bookId, _bookInventory[bookId]);
         }
 
@@ -311,6 +432,7 @@ namespace WordsOnTheWaves.Core
             }
 
             _bookInventory[bookId] = current - amount;
+            SaveBookInventory();
             EventManager.OnInventoryChanged?.Invoke(bookId, _bookInventory[bookId]);
             return true;
         }
@@ -366,7 +488,10 @@ namespace WordsOnTheWaves.Core
             {
                 cumulative += rule.spawnWeight;
                 if (roll < cumulative)
+                {
+                    Debug.Log($"[DataManager] Random Rule Roll: {roll}/{totalWeight} => Type: {rule.customerType} (Weight: {rule.spawnWeight})");
                     return rule;
+                }
             }
 
             // Fallback — không bao giờ xảy ra nếu data hợp lệ

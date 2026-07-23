@@ -1,7 +1,9 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 using WordsOnTheWaves.Events;
 using WordsOnTheWaves.Data;
+using WordsOnTheWaves.Core;
 
 namespace WordsOnTheWaves.NPCs
 {
@@ -36,9 +38,16 @@ namespace WordsOnTheWaves.NPCs
         private float _waitTimer;
         private Action<CustomerController> _onWalkOutComplete;
 
+        [Header("Debug Inspector")]
+        [SerializeField] private CustomerType _debugCustomerType;
+
         // Data
         public CustomerType CustomerType { get; private set; }
         public int PoolIndex { get; set; }
+        public BookGenre RequestedGenre { get; private set; }
+        public string SpecialCustomerId { get; private set; }
+
+        private bool _isWaitingForAdvice = false;
 
         private void Awake()
         {
@@ -53,6 +62,26 @@ namespace WordsOnTheWaves.NPCs
         public void InitAndStart(CustomerType type, Vector3 spawnPos, Vector3 posStop, Vector3 posB, bool hasPosC, Vector3 posC, Action<CustomerController> onComplete)
         {
             CustomerType = type;
+            _debugCustomerType = type; // Hiển thị trên Inspector
+            
+            _isWaitingForAdvice = false;
+            
+            if (type == CustomerType.NeedAdvice)
+            {
+                Array genres = Enum.GetValues(typeof(BookGenre));
+                RequestedGenre = (BookGenre)genres.GetValue(UnityEngine.Random.Range(0, genres.Length));
+            }
+            else if (type == CustomerType.Special)
+            {
+                var specials = DataManager.Instance.SpecialCustomers;
+                if (specials != null && specials.Count > 0)
+                {
+                    var special = specials[UnityEngine.Random.Range(0, specials.Count)];
+                    SpecialCustomerId = special.id;
+                    RequestedGenre = special.preferredGenre;
+                }
+            }
+
             transform.position = spawnPos;
             _posStop = posStop;
             _posB = posB;
@@ -129,9 +158,27 @@ namespace WordsOnTheWaves.NPCs
 
         private void HandleWaiting()
         {
+            if (_isWaitingForAdvice) return;
+
+            // Nếu vừa mới đến và là khách cần tư vấn
+            if (_waitTimer == _waitDuration && (CustomerType == CustomerType.NeedAdvice || CustomerType == CustomerType.Special))
+            {
+                _isWaitingForAdvice = true;
+                EventManager.OnCustomerNeedsAdvice?.Invoke(this, RequestedGenre, CustomerType);
+                return;
+            }
+
             _waitTimer -= Time.deltaTime;
             if (_waitTimer <= 0f)
             {
+                // Tự động mua sách đối với khách Normal
+                if (CustomerType == CustomerType.Normal)
+                {
+                    AutoBuyRandomBookFromWagon();
+                }
+
+                EventManager.OnCustomerLeftCounter?.Invoke(this.gameObject);
+                
                 if (_hasPosC)
                 {
                     ChangeState(CustomerState.WalkingToC);
@@ -141,6 +188,54 @@ namespace WordsOnTheWaves.NPCs
                     ChangeState(CustomerState.WalkingOut);
                 }
             }
+        }
+
+        private void AutoBuyRandomBookFromWagon()
+        {
+            var wagon = DataManager.Instance.GetWagonCargo();
+            List<string> availableBooks = new List<string>();
+            foreach (var kvp in wagon)
+            {
+                if (kvp.Value > 0) availableBooks.Add(kvp.Key);
+            }
+
+            if (availableBooks.Count > 0)
+            {
+                // Chọn ngẫu nhiên 1 cuốn sách
+                string selectedBookId = availableBooks[UnityEngine.Random.Range(0, availableBooks.Count)];
+                
+                // Thực hiện mua
+                DataManager.Instance.SellBookFromWagon(selectedBookId);
+                
+                if (DataManager.Instance.Books.TryGetValue(selectedBookId, out var bookData))
+                {
+                    float multiplier = 1f;
+                    var rules = DataManager.Instance.CustomerSpawnRules;
+                    foreach (var rule in rules)
+                    {
+                        if (rule.customerType == CustomerType.Normal)
+                        {
+                            multiplier = rule.bonusMultiplier;
+                            break;
+                        }
+                    }
+                    
+                    int totalCoins = Mathf.RoundToInt(bookData.sellPrice * multiplier);
+                    DataManager.Instance.AddCoins(totalCoins);
+                    
+                    Debug.Log($"[CustomerController] Normal customer auto-bought '{selectedBookId}' for {totalCoins} coins.");
+                }
+            }
+            else
+            {
+                Debug.Log("[CustomerController] Normal customer wanted to buy but wagon is empty.");
+            }
+        }
+
+        public void OnAdviceReceived(bool isAccepted)
+        {
+            _isWaitingForAdvice = false;
+            _waitTimer = 0f; // Bắt buộc rời đi ở frame sau
         }
 
         private void HandleWalkingToC()

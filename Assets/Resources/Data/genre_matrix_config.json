@@ -1,0 +1,11 @@
+{
+  "matrix": [
+    { "genre": "Crime",   "nearGenres": ["Drama", "Classic"] },
+    { "genre": "Drama",   "nearGenres": ["Crime", "Classic"] },
+    { "genre": "Fact",    "nearGenres": ["Travel", "Classic"] },
+    { "genre": "Fantasy", "nearGenres": ["Kids", "Travel"] },
+    { "genre": "Classic", "nearGenres": ["Drama", "Fact"] },
+    { "genre": "Kids",    "nearGenres": ["Fantasy", "Travel"] },
+    { "genre": "Travel",  "nearGenres": ["Fact", "Fantasy"] }
+  ]
+}

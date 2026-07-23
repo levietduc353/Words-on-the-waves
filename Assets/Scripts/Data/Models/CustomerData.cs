@@ -25,6 +25,7 @@ namespace WordsOnTheWaves.Data
     public class CustomerSpawnRule
     {
         /// <summary>Loại khách hàng.</summary>
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public CustomerType customerType;
 
         /// <summary>Tỉ lệ xuất hiện (weighted random). Không cần tổng = 100.</summary>

@@ -118,6 +118,24 @@ namespace WordsOnTheWaves.Events
         public static Action<GameObject> OnCustomerArrived;
 
         /// <summary>
+        /// Phát ra khi NPC khách hàng loại NeedAdvice/Special yêu cầu tư vấn sách.
+        /// Tham số: NPC, Thể loại mong muốn, Loại NPC.
+        /// </summary>
+        public static Action<WordsOnTheWaves.NPCs.CustomerController, WordsOnTheWaves.Data.BookGenre, WordsOnTheWaves.Data.CustomerType> OnCustomerNeedsAdvice;
+
+        /// <summary>
+        /// Phát ra khi người chơi chọn xong 1 sách cho khách.
+        /// Tham số: NPC, isAccepted (đúng/sai).
+        /// </summary>
+        public static Action<WordsOnTheWaves.NPCs.CustomerController, bool> OnAdviceFinished;
+
+        /// <summary>
+        /// Phát ra khi NPC khách hàng bắt đầu rời khỏi quầy (PosStop).
+        /// Tham số: GameObject của NPC.
+        /// </summary>
+        public static Action<GameObject> OnCustomerLeftCounter;
+
+        /// <summary>
         /// Phát ra khi NPC khách hàng đã đi khỏi tiệm (về posB và bị trả lại pool).
         /// Tham số: GameObject của NPC.
         /// </summary>

@@ -56,4 +56,26 @@ namespace WordsOnTheWaves.Data
         /// </summary>
         public Dictionary<string, int> locationUnlockCosts;
     }
+
+    [Serializable]
+    public class GenreProximity
+    {
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+        public BookGenre genre;
+        
+        [Newtonsoft.Json.JsonProperty(ItemConverterType = typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+        public List<BookGenre> nearGenres;
+    }
+
+    [Serializable]
+    public class GenreMatrixConfig
+    {
+        public List<GenreProximity> matrix;
+    }
+
+    [Serializable]
+    public class PlayerProfile
+    {
+        public int currentCoins;
+    }
 }
